@@ -1,17 +1,8 @@
 - [Getting started](#getting-started)
   - [Install](#install)
   - [Configure](#configure)
-  - 🙌 [Retrieving API Information from Shopify](#retrieving-api-information-from-shopify)
-    - 🛒 [Enabling Cart and Checkout features](#enabling-cart-and-checkout-features)
-  - 🔥 [Fire it up](#fire-it-up)
-- 🔌 [Plugin options](#plugin-options)
-- 🎨 [Images](#images)
-  - 🚀 [Use Shopify CDN](#use-shopify-cdn)
-  - 🚥 [Use runtime images](#use-runtime-images)
-  - 🖼️ [Download images up front](#download-images-up-front)
-- 🚨 [Limitations](#limitations)
-- 🛠 [Development](#development)
-- 💾 [Migrating from v4 to v5](#migrating-from-v4-to-v5)
+  - [Explore your data](#explore)
+- [Supported field types](#supported-fields)
 
 # gatsby-source-shopify
 
@@ -61,7 +52,7 @@ module.exports = {
 }
 ```
 
-<div id="query-data"></div>
+<div id="explore"></div>
 
 ### Explore your data
 
@@ -81,6 +72,7 @@ To create a production build, use gatsby build
 ```
 
 Now follow the second link to explore your Medusa data!
+
 <div id="supported-fields"></div>
 
 ## Supported field types
