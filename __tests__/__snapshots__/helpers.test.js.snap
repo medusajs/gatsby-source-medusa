@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`helper functions should return return a new node from processNode 1`] = `
+exports[`processNode should return return a new node from data 1`] = `
 Object {
   "children": Array [],
   "description": "A test product",
