@@ -12,9 +12,9 @@ exports.sourceNodes = async (
 
   const fetchNodes = async (fieldName) => {
     switch (fieldName) {
-      case "regions":
+      case "region":
         return await fetchRegions(baseUrl);
-      case "products":
+      case "product":
         return await fetchProducts(baseUrl);
       default:
         console.warn(

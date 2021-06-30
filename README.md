@@ -58,7 +58,7 @@ module.exports = {
 
 Run your site with `gatsby develop`. When the site builds successfully, you should see output like this:
 
-```
+```shell
 You can now view your-site in the browser.
 ⠀
   http://localhost:8000/
