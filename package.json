@@ -1,14 +1,18 @@
 {
   "name": "gatsby-source-medusa",
-  "version": "0.0.1",
-  "description": "A minimal boilerplate for the essential files Gatsby looks for in a plugin",
+  "version": "0.1.0",
+  "description": "Gatsby source plugin for building websites using Medusa as a data source.",
   "main": "gatsby-node.js",
   "scripts": {
     "test": "jest --watchAll"
   },
   "keywords": [
     "gatsby",
-    "gatsby-plugin"
+    "gatsby-plugin",
+    "gatsby-source",
+    "medusa",
+    "medusajs",
+    "e-commerce"
   ],
   "author": "Kasper Kristensen <kasper@medusa-commerce.com>",
   "license": "MIT",
@@ -16,8 +20,10 @@
     "type": "git",
     "url": "https://github.com/medusajs/gatsby-source-medusa"
   },
+  "bugs": {
+    "url": "https://github.com/medusajs/gatsby-source-medusa/issues"
+  },
   "dependencies": {
-    "@medusajs/medusa-js": "^1.0.1-canary.1",
     "axios": "^0.21.1",
     "chalk": "^4.1.1"
   },
