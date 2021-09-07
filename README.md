@@ -1,29 +1,48 @@
-# gatsby-source-medusa
+<p align="center">
+  <a href="https://www.medusa-commerce.com">
+    <img alt="Medusa" src="https://user-images.githubusercontent.com/7554214/129161578-19b83dc8-fac5-4520-bd48-53cba676edd2.png" width="100" />
+  </a>
+</p>
+<h1 align="center">
+  gatsby-source-medusa
+</h1>
+<p align="center">
+Medusa is an open-source headless commerce engine that enables developers to create amazing digital commerce experiences. This is a Gatsby source plugin for building websites using Medusa as a data source.
+</p>
+<p align="center">
+  <a href="https://github.com/medusajs/medusa/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Medusa is released under the MIT license." />
+  </a>
+  <a href="https://github.com/medusajs/medusa/blob/master/CONTRIBUTING.md">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
+  </a>
+  <a href="https://discord.gg/xpCwq3Kfn8">
+    <img src="https://img.shields.io/badge/chat-on%20discord-7289DA.svg" alt="Discord Chat" />
+  </a>
+  <a href="https://twitter.com/intent/follow?screen_name=medusajs">
+    <img src="https://img.shields.io/twitter/follow/medusajs.svg?label=Follow%20@medusajs" alt="Follow @medusajs" />
+  </a>
+</p>
 
-<div id="getting-started"></div>
-
-## Getting started&nbsp;&nbsp;🚀
+## Quickstart
 
 This takes you through the minimal steps to see your Medusa data in your Gatsby site's GraphiQL explorer.
 
 <div id="install"></div>
 
-### Install&nbsp;&nbsp;🛠️
+### 1. Installation
 
-Install this plugin to your Gatsby site.
+Install the source plugin to your Gatsby project using your favorite package manager.
 
 ```shell
 npm install gatsby-source-medusa
 ```
-or
 
 ```shell
 yarn add gatsby-source-medusa
 ```
 
-<div id="configure"></div>
-
-### Configure&nbsp;&nbsp;⚙️
+### 2. Configuration
 
 Add the plugin to your `gatsby-config.js`:
 
@@ -35,8 +54,7 @@ module.exports = {
     {
       resolve: "gatsby-source-medusa",
       options: {
-        baseUrl: process.env.MEDUSA_BASE_URL,
-        fields: ["products", "regions"],
+        storeUrl: process.env.MEDUSA_URL,
       },
     },
     ...,
@@ -44,8 +62,6 @@ module.exports = {
 }
 ```
 
-<div id="supported-fields"></div>
+## You are ready to query your data
 
-## Supported field types&nbsp;&nbsp;🧱
-
-The source plugin currently only supports the fields: products and regions.
+You should now be able to view your stores `products` and `regions` in your [Gatsby site's GraphiQL explorer](http://http://localhost:8000/__graphiql).
