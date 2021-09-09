@@ -24,7 +24,12 @@ export const createClient = (
 ) => {
   const { storeUrl } = options;
 
-  async function products() {
+  /**
+   *
+   * @param queryString
+   * @returns
+   */
+  async function products(queryString?: string) {
     let products: any[] = [];
     let offset = 0;
     let count = 1;
@@ -46,7 +51,12 @@ export const createClient = (
     return products;
   }
 
-  async function regions(): Promise<any[]> {
+  /**code
+   *
+   * @param queryString
+   * @returns
+   */
+  async function regions(queryString?: string): Promise<any[]> {
     const regions = await medusaRequest(storeUrl, `/store/regions`)
       .then(({ data }) => {
         return data.regions;

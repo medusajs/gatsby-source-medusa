@@ -28,6 +28,7 @@
     "chalk": "^4.1.1",
     "gatsby": "^3.13.0",
     "gatsby-core-utils": "^2.13.0",
+    "gatsby-plugin-image": "^1.13.0",
     "gatsby-source-filesystem": "^3.13.0"
   },
   "devDependencies": {

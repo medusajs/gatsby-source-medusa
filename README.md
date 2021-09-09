@@ -28,8 +28,6 @@ Medusa is an open-source headless commerce engine that enables developers to cre
 
 This takes you through the minimal steps to see your Medusa data in your Gatsby site's GraphiQL explorer.
 
-<div id="install"></div>
-
 ### 1. Installation
 
 Install the source plugin to your Gatsby project using your favorite package manager.
@@ -62,6 +60,6 @@ module.exports = {
 }
 ```
 
-## You are ready to query your data
+## You should now be ready to begin querying your data
 
 You should now be able to view your stores `products` and `regions` in your [Gatsby site's GraphiQL explorer](http://http://localhost:8000/__graphiql).
