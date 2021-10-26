@@ -1,14 +1,18 @@
 {
   "name": "gatsby-source-medusa",
   "version": "0.0.1",
-  "description": "A minimal boilerplate for the essential files Gatsby looks for in a plugin",
-  "main": "gatsby-node.js",
+  "description": "Gatsby source plugin for building websites using Medusa Commerce as a data source",
   "scripts": {
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "watch": "tsc-watch --outDir .",
+    "build": "tsc --outDir ."
   },
   "keywords": [
     "gatsby",
-    "gatsby-plugin"
+    "gatsby-plugin",
+    "gatsby-source-medusa",
+    "medusa",
+    "medusa-commerce"
   ],
   "author": "Kasper Kristensen <kasper@medusa-commerce.com>",
   "license": "MIT",
@@ -16,12 +20,22 @@
     "type": "git",
     "url": "https://github.com/medusajs/gatsby-source-medusa"
   },
+  "bugs": {
+    "url": "https://github.com/medusajs/gatsby-source-medusa/issues"
+  },
   "dependencies": {
-    "@medusajs/medusa-js": "^1.0.1-canary.1",
     "axios": "^0.21.1",
-    "chalk": "^4.1.1"
+    "babel-preset-gatsby-package": "^2.0.0",
+    "chalk": "^4.1.1",
+    "gatsby": "^3.13.0",
+    "gatsby-core-utils": "^2.13.0",
+    "gatsby-plugin-image": "^1.13.0",
+    "gatsby-source-filesystem": "^3.13.0"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "@types/jest": "^27.0.1",
+    "jest": "^27.0.6",
+    "tsc-watch": "^4.5.0",
+    "typescript": "^4.4.2"
   }
 }
