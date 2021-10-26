@@ -32,8 +32,6 @@ async function sourceAllNodes(
   }
 }
 
-const medusaNodeTypes = [`MedusaProduct`, `MedusaRegion`];
-
 // @TODO: Add once query by updated_since has been added
 // async function sourceUpdatedNodes(
 //   gatsbyApi: SourceNodesArgs,
@@ -139,7 +137,7 @@ export async function onCreateNode({
         });
 
         if (imageNode) {
-          node.images[i] = { ...node.images[i], gatsbyImage: imageNode.id };
+          node.images[i] = { image: imageNode.id };
         }
       }
     }
@@ -156,6 +154,6 @@ export async function createSchemaCustomization({ actions }: any) {
       images: [MedusaImage]
     }
     type MedusaImage {
-      gatsbyImage: File @link
+      image: File @link
     }`);
 }

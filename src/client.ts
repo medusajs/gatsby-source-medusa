@@ -26,10 +26,10 @@ export const createClient = (
 
   /**
    *
-   * @param queryString
+   * @param date used fetch products updated since the specified date
    * @returns
    */
-  async function products(queryString?: string) {
+  async function products(date?: string) {
     let products: any[] = [];
     let offset = 0;
     let count = 1;
@@ -51,12 +51,12 @@ export const createClient = (
     return products;
   }
 
-  /**code
+  /**
    *
-   * @param queryString
+   * @param date used fetch regions updated since the specified date
    * @returns
    */
-  async function regions(queryString?: string): Promise<any[]> {
+  async function regions(date?: string) {
     const regions = await medusaRequest(storeUrl, `/store/regions`)
       .then(({ data }) => {
         return data.regions;
