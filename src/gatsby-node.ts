@@ -1,16 +1,7 @@
-import {
-  PluginOptionsSchemaArgs,
-  SourceNodesArgs,
-  CreateResolversArgs,
-} from "gatsby";
+import { PluginOptionsSchemaArgs, SourceNodesArgs } from "gatsby";
 import { createRemoteFileNode } from "gatsby-source-filesystem";
 import { makeSourceFromOperation } from "./make-source-from-operation";
 import { createOperations } from "./operations";
-// import {
-//   getGatsbyImageResolver,
-//   IGatsbyGraphQLResolverArgumentConfig,
-// } from "gatsby-plugin-image/graphql-utils";
-// import { makeResolveGatsbyImageData } from "./resolve-gatsby-images";
 
 /**
  * TODO: MedusaCollections are not currently availible through the storefront API.
@@ -43,6 +34,7 @@ async function sourceAllNodes(
 
 const medusaNodeTypes = [`MedusaProduct`, `MedusaRegion`];
 
+// @TODO: Add once query by updated_since has been added
 // async function sourceUpdatedNodes(
 //   gatsbyApi: SourceNodesArgs,
 //   pluginOptions: MedusaPluginOptions
@@ -109,36 +101,6 @@ export async function sourceNodes(
         }
   );
 }
-
-// export function createResolvers(
-//   { createResolvers, cache }: CreateResolversArgs,
-//   { downloadImages }: MedusaPluginOptions
-// ): void {
-//   if (!downloadImages) {
-//     const args = {
-//       placeholder: {
-//         description: `Low resolution version of the image`,
-//         type: `String`,
-//         defaultValue: null,
-//       } as IGatsbyGraphQLResolverArgumentConfig,
-//     };
-//     const imageNodeTypes = [`MedusaProductThumbnail`, `MedusaProductImage`];
-
-//     const resolvers = imageNodeTypes.reduce((r, nodeType) => {
-//       return {
-//         ...r,
-//         [nodeType]: {
-//           gatsbyImageData: getGatsbyImageResolver(
-//             makeResolveGatsbyImageData(cache),
-//             args
-//           ),
-//         },
-//       };
-//     }, {});
-
-//     createResolvers(resolvers);
-//   }
-// }
 
 export async function onCreateNode({
   actions: { createNode },
