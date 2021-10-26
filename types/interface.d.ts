@@ -1,7 +1,5 @@
 interface MedusaPluginOptions {
   storeUrl: string;
-  medusaFields?: string[];
-  downloadImages?: boolean;
 }
 
 interface IMedusaOperation {
