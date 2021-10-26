@@ -6,11 +6,11 @@ import {
 import { createRemoteFileNode } from "gatsby-source-filesystem";
 import { makeSourceFromOperation } from "./make-source-from-operation";
 import { createOperations } from "./operations";
-import {
-  getGatsbyImageResolver,
-  IGatsbyGraphQLResolverArgumentConfig,
-} from "gatsby-plugin-image/graphql-utils";
-import { makeResolveGatsbyImageData } from "./resolve-gatsby-images";
+// import {
+//   getGatsbyImageResolver,
+//   IGatsbyGraphQLResolverArgumentConfig,
+// } from "gatsby-plugin-image/graphql-utils";
+// import { makeResolveGatsbyImageData } from "./resolve-gatsby-images";
 
 /**
  * TODO: MedusaCollections are not currently availible through the storefront API.
@@ -110,35 +110,35 @@ export async function sourceNodes(
   );
 }
 
-export function createResolvers(
-  { createResolvers, cache }: CreateResolversArgs,
-  { downloadImages }: MedusaPluginOptions
-): void {
-  if (!downloadImages) {
-    const args = {
-      placeholder: {
-        description: `Low resolution version of the image`,
-        type: `String`,
-        defaultValue: null,
-      } as IGatsbyGraphQLResolverArgumentConfig,
-    };
-    const imageNodeTypes = [`MedusaProductThumbnail`, `MedusaProductImage`];
+// export function createResolvers(
+//   { createResolvers, cache }: CreateResolversArgs,
+//   { downloadImages }: MedusaPluginOptions
+// ): void {
+//   if (!downloadImages) {
+//     const args = {
+//       placeholder: {
+//         description: `Low resolution version of the image`,
+//         type: `String`,
+//         defaultValue: null,
+//       } as IGatsbyGraphQLResolverArgumentConfig,
+//     };
+//     const imageNodeTypes = [`MedusaProductThumbnail`, `MedusaProductImage`];
 
-    const resolvers = imageNodeTypes.reduce((r, nodeType) => {
-      return {
-        ...r,
-        [nodeType]: {
-          gatsbyImageData: getGatsbyImageResolver(
-            makeResolveGatsbyImageData(cache),
-            args
-          ),
-        },
-      };
-    }, {});
+//     const resolvers = imageNodeTypes.reduce((r, nodeType) => {
+//       return {
+//         ...r,
+//         [nodeType]: {
+//           gatsbyImageData: getGatsbyImageResolver(
+//             makeResolveGatsbyImageData(cache),
+//             args
+//           ),
+//         },
+//       };
+//     }, {});
 
-    createResolvers(resolvers);
-  }
-}
+//     createResolvers(resolvers);
+//   }
+// }
 
 export async function onCreateNode({
   actions: { createNode },
@@ -164,7 +164,23 @@ export async function onCreateNode({
       node.thumbnail = thumbnailNode.id;
     }
 
-    node.images.forEach((img: any) => {});
+    if (node.images) {
+      for (let i = 0; i < node.images.length; i++) {
+        const imageNode = await createRemoteFileNode({
+          url: node.images[i].url,
+          cache,
+          createNode,
+          createNodeId,
+          parentNodeId: node.id,
+          store,
+          reporter,
+        });
+
+        if (imageNode) {
+          node.images[i] = { ...node.images[i], gatsbyImage: imageNode.id };
+        }
+      }
+    }
   }
 }
 
@@ -175,5 +191,9 @@ export async function createSchemaCustomization({ actions }: any) {
       id: ID!
       # create a relationship between YourSourceType and the File nodes for optimized images
       thumbnail: File @link
+      images: [MedusaImage]
+    }
+    type MedusaImage {
+      gatsbyImage: File @link
     }`);
 }

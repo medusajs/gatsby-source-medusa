@@ -94,7 +94,7 @@ export function makeResolveGatsbyImageData(cache: any) {
         formats,
         layout,
         sourceMetadata,
-        pluginName: `gatsby-source-shopify`,
+        pluginName: `gatsby-source-medusa`,
         filename: image.originalSrc,
         generateImageSource,
       });
@@ -113,7 +113,7 @@ export function makeResolveGatsbyImageData(cache: any) {
       formats,
       layout,
       sourceMetadata,
-      pluginName: `gatsby-source-shopify`,
+      pluginName: `gatsby-source-medusa`,
       filename: image.originalSrc,
       generateImageSource,
     });
