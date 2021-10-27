@@ -48,6 +48,21 @@ export const createClient = (
         });
     } while (products.length < count);
 
+    for (const product of products) {
+      let { variants } = product;
+      let completeVariants = [];
+
+      for (const variant of variants) {
+        const data = await medusaRequest(
+          storeUrl,
+          `/store//variants/${variant.id}`
+        ).then(({ data }) => data.variant);
+        completeVariants.push(data);
+      }
+
+      product.variants = completeVariants;
+    }
+
     return products;
   }
 
