@@ -4,13 +4,13 @@ import { Reporter } from "gatsby-cli/lib/reporter/reporter";
 function medusaRequest(
   storeURL: string,
   path = "",
-  payload = {}
+  headers = {}
 ): AxiosPromise {
   const options: AxiosRequestConfig = {
     method: "GET",
     withCredentials: true,
     url: path,
-    data: payload,
+    headers: headers,
   };
 
   const client = axios.create({ baseURL: storeURL });
@@ -22,7 +22,7 @@ export const createClient = (
   options: MedusaPluginOptions,
   reporter: Reporter
 ) => {
-  const { storeUrl } = options;
+  const { storeUrl, authToken } = options;
 
   /**
    *
@@ -93,8 +93,34 @@ export const createClient = (
     return regions;
   }
 
+  /**
+   *
+   * @param date used fetch regions updated since the specified date
+   * @returns
+   */
+  async function orders(date?: string) {
+    const orders = await medusaRequest(
+      storeUrl,
+      `/admin/orders${date ? `?updated_at[gte]=${date}&` : ""}`,
+      {
+        Authorization: `Bearer ${authToken}`,
+      }
+    )
+      .then(({ data }) => {
+        return data.orders;
+      })
+      .catch((error) => {
+        console.warn(`
+            "The following error status was produced while attempting to fetch regions: ${error}
+      `);
+        return [];
+      });
+    return orders;
+  }
+
   return {
     products,
     regions,
+    orders,
   };
 };

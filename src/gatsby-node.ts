@@ -12,6 +12,7 @@ import { formatUri } from "./utils/format-uri";
 export function pluginOptionsSchema({ Joi }: PluginOptionsSchemaArgs) {
   return Joi.object({
     storeUrl: Joi.string().required(),
+    authToken: Joi.string().optional(),
   });
 }
 
@@ -19,12 +20,17 @@ async function sourceAllNodes(
   gatsbyApi: SourceNodesArgs,
   pluginOptions: MedusaPluginOptions
 ): Promise<void> {
-  const { createProductsOperation, createRegionsOperation } = createOperations(
-    pluginOptions,
-    gatsbyApi
-  );
+  const {
+    createProductsOperation,
+    createRegionsOperation,
+    createOrdersOperation,
+  } = createOperations(pluginOptions, gatsbyApi);
 
   const operations = [createProductsOperation, createRegionsOperation];
+
+  if (pluginOptions.authToken) {
+    operations.push(createOrdersOperation);
+  }
 
   const sourceFromOperation = makeSourceFromOperation(gatsbyApi);
 
@@ -33,15 +39,17 @@ async function sourceAllNodes(
   }
 }
 
-const medusaNodeTypes = ["MedusaRegions", "MedusaProducts"];
+const medusaNodeTypes = ["MedusaRegions", "MedusaProducts", "MedusaOrders"];
 
-// @TODO: Add once query by updated_since has been added
 async function sourceUpdatedNodes(
   gatsbyApi: SourceNodesArgs,
   pluginOptions: MedusaPluginOptions
 ): Promise<void> {
-  const { incrementalProductsOperation, incrementalRegionsOperation } =
-    createOperations(pluginOptions, gatsbyApi);
+  const {
+    incrementalProductsOperation,
+    incrementalRegionsOperation,
+    incrementalOrdersOperation,
+  } = createOperations(pluginOptions, gatsbyApi);
 
   const lastBuildTime = new Date(
     gatsbyApi.store.getState().status.plugins?.[`gatsby-source-medusa`]?.[
@@ -60,6 +68,10 @@ async function sourceUpdatedNodes(
     incrementalRegionsOperation(lastBuildTime),
   ];
 
+  if (pluginOptions.authToken) {
+    operations.push(incrementalOrdersOperation(lastBuildTime));
+  }
+
   const sourceFromOperation = makeSourceFromOperation(gatsbyApi);
 
   for (const op of operations) {
@@ -77,10 +89,6 @@ export async function sourceNodes(
   const lastBuildTime = pluginStatus?.[`lastBuildTime`];
 
   if (lastBuildTime !== undefined) {
-    /**
-     * We should add a way to retrieve products and regions that have
-     * been updated/created since last build time to support incremental builds.
-     */
     gatsbyApi.reporter.info(`Cache is warm, running an incremental build`);
     await sourceUpdatedNodes(gatsbyApi, pluginOptions);
   } else {
