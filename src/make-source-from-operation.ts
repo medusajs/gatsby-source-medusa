@@ -14,6 +14,5 @@ export function makeSourceFromOperation(gatsbyApi: SourceNodesArgs) {
       const node = processNode(rawNode, op.name, gatsbyApi.createContentDigest);
       actions.createNode(node);
     });
-    reporter.info(`Finalized operation query ${op.name}`);
   };
 }
