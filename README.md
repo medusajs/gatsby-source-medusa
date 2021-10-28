@@ -53,6 +53,7 @@ module.exports = {
       resolve: "gatsby-source-medusa",
       options: {
         storeUrl: process.env.MEDUSA_URL,
+        authToken: process.env.MEDUSA_AUTH_TOKEN //This is optional
       },
     },
     ...,
@@ -60,6 +61,8 @@ module.exports = {
 }
 ```
 
+The plugin accepts two options `storeUrl` and `authToken`. The `storeUrl` option is required and should point to the server where your Medusa instance is hosted (this could be `localhost:9000` in development). The `authToken` option is optional, and if you add it the plugin will also source orders from your store.
+
 ## You should now be ready to begin querying your data
 
-You should now be able to view your stores `products` and `regions` in your [Gatsby site's GraphiQL explorer](http://http://localhost:8000/__graphiql).
+You should now be able to view your stores `MedusaProducts`, `MedusaRegions`, and `MedusaOrders` (if enabled) in your Gatsby site's GraphiQL explorer.
