@@ -10,11 +10,12 @@
   "keywords": [
     "gatsby",
     "gatsby-plugin",
+    "gatsby-source",
     "gatsby-source-medusa",
     "medusa",
     "medusa-commerce"
   ],
-  "author": "Kasper Kristensen <kasper@medusa-commerce.com>",
+  "author": "Kasper Kristensen <kasper@medusa-commerce.com> (https://www.medusa-commerce.com/)",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -26,7 +27,6 @@
   "dependencies": {
     "axios": "^0.21.1",
     "babel-preset-gatsby-package": "^2.0.0",
-    "chalk": "^4.1.1",
     "gatsby": "^3.13.0",
     "gatsby-core-utils": "^2.13.0",
     "gatsby-plugin-image": "^1.13.0",
