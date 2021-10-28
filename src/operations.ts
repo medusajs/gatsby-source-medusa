@@ -21,8 +21,8 @@ export function createOperations(
     createProductsOperation: createOperation("products"),
     createRegionsOperation: createOperation("regions"),
     incrementalProductsOperation: (date: Date) =>
-      createOperation("products", `updated_since=${date.toISOString()}`),
+      createOperation("products", date.toISOString()),
     incrementalRegionsOperation: (date: Date) =>
-      createOperation("products", `updated_since=${date.toISOString()}`),
+      createOperation("products", date.toISOString()),
   };
 }

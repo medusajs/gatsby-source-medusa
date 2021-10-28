@@ -34,7 +34,12 @@ export const createClient = (
     let offset = 0;
     let count = 1;
     do {
-      await medusaRequest(storeUrl, `/store/products?offset=${offset}`)
+      await medusaRequest(
+        storeUrl,
+        `/store/products?${
+          date ? `updated_at[gte]=${date}&` : ""
+        }offset=${offset}`
+      )
         .then(({ data }) => {
           products = [...products, ...data.products];
           count = data.count;
@@ -55,7 +60,7 @@ export const createClient = (
       for (const variant of variants) {
         const data = await medusaRequest(
           storeUrl,
-          `/store//variants/${variant.id}`
+          `/store/variants/${variant.id}`
         ).then(({ data }) => data.variant);
         completeVariants.push(data);
       }
@@ -72,7 +77,10 @@ export const createClient = (
    * @returns
    */
   async function regions(date?: string) {
-    const regions = await medusaRequest(storeUrl, `/store/regions`)
+    const regions = await medusaRequest(
+      storeUrl,
+      `/store/regions${date ? `?updated_at[gte]=${date}&` : ""}`
+    )
       .then(({ data }) => {
         return data.regions;
       })

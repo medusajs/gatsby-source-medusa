@@ -2,6 +2,7 @@ import { PluginOptionsSchemaArgs, SourceNodesArgs } from "gatsby";
 import { createRemoteFileNode } from "gatsby-source-filesystem";
 import { makeSourceFromOperation } from "./make-source-from-operation";
 import { createOperations } from "./operations";
+import { formatUri } from "./utils/format-uri";
 
 /**
  * TODO: MedusaCollections are not currently availible through the storefront API.
@@ -32,37 +33,39 @@ async function sourceAllNodes(
   }
 }
 
+const medusaNodeTypes = ["MedusaRegions", "MedusaProducts"];
+
 // @TODO: Add once query by updated_since has been added
-// async function sourceUpdatedNodes(
-//   gatsbyApi: SourceNodesArgs,
-//   pluginOptions: MedusaPluginOptions
-// ): Promise<void> {
-//   const { incrementalProductsOperation, incrementalRegionsOperation } =
-//     createOperations(pluginOptions, gatsbyApi);
+async function sourceUpdatedNodes(
+  gatsbyApi: SourceNodesArgs,
+  pluginOptions: MedusaPluginOptions
+): Promise<void> {
+  const { incrementalProductsOperation, incrementalRegionsOperation } =
+    createOperations(pluginOptions, gatsbyApi);
 
-//   const lastBuildTime = new Date(
-//     gatsbyApi.store.getState().status.plugins?.[`gatsby-source-medusa`]?.[
-//       `lastBuildTime`
-//     ]
-//   );
+  const lastBuildTime = new Date(
+    gatsbyApi.store.getState().status.plugins?.[`gatsby-source-medusa`]?.[
+      `lastBuildTime`
+    ]
+  );
 
-//   for (const nodeType of medusaNodeTypes) {
-//     gatsbyApi
-//       .getNodesByType(nodeType)
-//       .forEach((node) => gatsbyApi.actions.touchNode(node));
-//   }
+  for (const nodeType of medusaNodeTypes) {
+    gatsbyApi
+      .getNodesByType(nodeType)
+      .forEach((node) => gatsbyApi.actions.touchNode(node));
+  }
 
-//   const operations = [
-//     incrementalProductsOperation(lastBuildTime),
-//     incrementalRegionsOperation(lastBuildTime),
-//   ];
+  const operations = [
+    incrementalProductsOperation(lastBuildTime),
+    incrementalRegionsOperation(lastBuildTime),
+  ];
 
-//   const sourceFromOperation = makeSourceFromOperation(gatsbyApi);
+  const sourceFromOperation = makeSourceFromOperation(gatsbyApi);
 
-//   for (const op of operations) {
-//     await sourceFromOperation(op);
-//   }
-// }
+  for (const op of operations) {
+    await sourceFromOperation(op);
+  }
+}
 
 export async function sourceNodes(
   gatsbyApi: SourceNodesArgs,
@@ -78,10 +81,8 @@ export async function sourceNodes(
      * We should add a way to retrieve products and regions that have
      * been updated/created since last build time to support incremental builds.
      */
-    gatsbyApi.reporter.info(
-      `Cache is warm, but we do not currently support incremental build. Running a clean build`
-    );
-    await sourceAllNodes(gatsbyApi, pluginOptions);
+    gatsbyApi.reporter.info(`Cache is warm, running an incremental build`);
+    await sourceUpdatedNodes(gatsbyApi, pluginOptions);
   } else {
     gatsbyApi.reporter.info(`Cache is cold, running a clean build`);
     await sourceAllNodes(gatsbyApi, pluginOptions);
@@ -110,24 +111,25 @@ export async function onCreateNode({
 }: any) {
   if (node.internal.type === `MedusaProducts`) {
     // create a FileNode in Gatsby that gatsby-transformer-sharp will create optimized images for
-    const thumbnailNode = await createRemoteFileNode({
-      // the url of the remote image to generate a node for
-      url: node.thumbnail,
-      cache,
-      createNode,
-      createNodeId,
-      parentNodeId: node.id,
-      store,
-      reporter,
-    });
-    if (thumbnailNode) {
+    if (node.thumbnail) {
+      const thumbnailNode = await createRemoteFileNode({
+        // the url of the remote image to generate a node for
+        url: formatUri(node.thumbnail),
+        cache,
+        createNode,
+        createNodeId,
+        parentNodeId: node.id,
+        store,
+        reporter,
+      });
+
       node.thumbnail = thumbnailNode.id;
     }
 
     if (node.images) {
       for (let i = 0; i < node.images.length; i++) {
         const imageNode = await createRemoteFileNode({
-          url: node.images[i].url,
+          url: formatUri(node.images[i].url),
           cache,
           createNode,
           createNodeId,
