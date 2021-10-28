@@ -1,5 +1,6 @@
 interface MedusaPluginOptions {
   storeUrl: string;
+  authToken: string;
 }
 
 interface IMedusaOperation {

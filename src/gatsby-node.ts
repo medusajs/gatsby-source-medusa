@@ -12,6 +12,7 @@ import { formatUri } from "./utils/format-uri";
 export function pluginOptionsSchema({ Joi }: PluginOptionsSchemaArgs) {
   return Joi.object({
     storeUrl: Joi.string().required(),
+    authToken: Joi.string().optional(),
   });
 }
 
@@ -33,7 +34,7 @@ async function sourceAllNodes(
   }
 }
 
-const medusaNodeTypes = ["MedusaRegions", "MedusaProducts"];
+const medusaNodeTypes = ["MedusaRegions", "MedusaProducts", "MedusaOrders"];
 
 // @TODO: Add once query by updated_since has been added
 async function sourceUpdatedNodes(
