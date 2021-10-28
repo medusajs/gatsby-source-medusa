@@ -27,7 +27,6 @@
   "dependencies": {
     "axios": "^0.21.1",
     "babel-preset-gatsby-package": "^2.0.0",
-    "gatsby": "^3.13.0",
     "gatsby-core-utils": "^2.13.0",
     "gatsby-plugin-image": "^1.13.0",
     "gatsby-source-filesystem": "^3.13.0"
@@ -37,5 +36,8 @@
     "jest": "^27.0.6",
     "tsc-watch": "^4.5.0",
     "typescript": "^4.4.2"
+  },
+  "peerDependencies": {
+    "gatsby": "^3.10.0"
   }
 }
