@@ -8,7 +8,7 @@ export function createOperations(
   const client = createClient(options, reporter);
 
   function createOperation(
-    name: "products" | "regions" | "orders",
+    name: "products" | "collections" | "regions" | "orders",
     queryString?: string
   ): IMedusaOperation {
     return {
@@ -19,10 +19,13 @@ export function createOperations(
 
   return {
     createProductsOperation: createOperation("products"),
+    createCollectionsOperation: createOperation("collections"),
     createRegionsOperation: createOperation("regions"),
     createOrdersOperation: createOperation("orders"),
     incrementalProductsOperation: (date: Date) =>
       createOperation("products", date.toISOString()),
+    incrementalCollectionsOperation: (date: Date) =>
+      createOperation("collections", date.toISOString()),
     incrementalRegionsOperation: (date: Date) =>
       createOperation("regions", date.toISOString()),
     incrementalOrdersOperation: (date: Date) =>

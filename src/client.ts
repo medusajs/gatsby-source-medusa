@@ -118,8 +118,29 @@ export const createClient = (
     return orders;
   }
 
+  async function collections(date?: string) {
+    const collections = await medusaRequest(
+      storeUrl,
+      `/store/orders${date ? `?updated_at[gte]=${date}&` : ""}`,
+      {
+        Authorization: `Bearer ${authToken}`,
+      }
+    )
+      .then(({ data }) => {
+        return data.collections;
+      })
+      .catch((error) => {
+        console.warn(`
+            "The following error status was produced while attempting to fetch collections: ${error}
+      `);
+        return [];
+      });
+    return collections;
+  }
+
   return {
     products,
+    collections,
     regions,
     orders,
   };

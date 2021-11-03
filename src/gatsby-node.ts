@@ -24,10 +24,16 @@ async function sourceAllNodes(
     createProductsOperation,
     createRegionsOperation,
     createOrdersOperation,
+    createCollectionsOperation,
   } = createOperations(pluginOptions, gatsbyApi);
 
-  const operations = [createProductsOperation, createRegionsOperation];
+  const operations = [
+    createProductsOperation,
+    createRegionsOperation,
+    createCollectionsOperation,
+  ];
 
+  // if auth token is provided then source orders
   if (pluginOptions.authToken) {
     operations.push(createOrdersOperation);
   }
@@ -39,7 +45,12 @@ async function sourceAllNodes(
   }
 }
 
-const medusaNodeTypes = ["MedusaRegions", "MedusaProducts", "MedusaOrders"];
+const medusaNodeTypes = [
+  "MedusaRegions",
+  "MedusaProducts",
+  "MedusaOrders",
+  "MedusaCollections",
+];
 
 async function sourceUpdatedNodes(
   gatsbyApi: SourceNodesArgs,
@@ -49,6 +60,7 @@ async function sourceUpdatedNodes(
     incrementalProductsOperation,
     incrementalRegionsOperation,
     incrementalOrdersOperation,
+    incrementalCollectionsOperation,
   } = createOperations(pluginOptions, gatsbyApi);
 
   const lastBuildTime = new Date(
@@ -66,6 +78,7 @@ async function sourceUpdatedNodes(
   const operations = [
     incrementalProductsOperation(lastBuildTime),
     incrementalRegionsOperation(lastBuildTime),
+    incrementalCollectionsOperation(lastBuildTime),
   ];
 
   if (pluginOptions.authToken) {
