@@ -4,11 +4,6 @@ import { makeSourceFromOperation } from "./make-source-from-operation";
 import { createOperations } from "./operations";
 import { formatUri } from "./utils/format-uri";
 
-/**
- * TODO: MedusaCollections are not currently availible through the storefront API.
- * Add once endpoint is ready!
- */
-
 export function pluginOptionsSchema({ Joi }: PluginOptionsSchemaArgs) {
   return Joi.object({
     storeUrl: Joi.string().required(),
