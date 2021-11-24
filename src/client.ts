@@ -48,21 +48,6 @@ export const createClient = (
         })
     } while (products.length < count)
 
-    // for (const product of products) {
-    //   let { variants } = product;
-    //   let completeVariants = [];
-
-    //   for (const variant of variants) {
-    //     const data = await medusaRequest(
-    //       storeUrl,
-    //       `/store/variants/${variant.id}`
-    //     ).then(({ data }) => data.variant);
-    //     completeVariants.push(data);
-    //   }
-
-    //   product.variants = completeVariants;
-    // }
-
     return products
   }
 
@@ -113,16 +98,24 @@ export const createClient = (
    * @returns
    */
   async function collections(date?: string) {
-    const collections = await medusaRequest(storeUrl, `/store/collections`)
-      .then(({ data }) => {
-        return data.collections
-      })
-      .catch((error) => {
-        console.warn(`
-            error: ${error.response.data}
-      `)
-        return []
-      })
+    let collections: any[] = []
+    let offset = 0
+    let count = 1
+    do {
+      await medusaRequest(storeUrl, `/store/collections?offset=${offset}`)
+        .then(({ data }) => {
+          collections = [...collections, ...data.collections]
+          count = data.count
+          offset = data.collections.length
+        })
+        .catch((error) => {
+          reporter.error(
+            `"The following error status was produced while attempting to fetch products: ${error}`
+          )
+          return []
+        })
+    } while (collections.length < count)
+
     return collections
   }
 
