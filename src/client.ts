@@ -26,7 +26,7 @@ export const createClient = (
 
   /**
    *
-   * @param date used fetch products updated since the specified date
+   * @param {string} date used fetch products updated since the specified date
    * @returns
    */
   async function products(date?: string) {
@@ -36,9 +36,7 @@ export const createClient = (
     do {
       await medusaRequest(
         storeUrl,
-        `/store/products?${
-          date ? `updated_at[gte]=${date}&` : ""
-        }offset=${offset}`
+        `/store/products?offset=${offset}`
       )
         .then(({ data }) => {
           products = [...products, ...data.products];
@@ -73,13 +71,13 @@ export const createClient = (
 
   /**
    *
-   * @param date used fetch regions updated since the specified date
+   * @param {string} date used fetch regions updated since the specified date
    * @returns
    */
   async function regions(date?: string) {
     const regions = await medusaRequest(
       storeUrl,
-      `/store/regions${date ? `?updated_at[gte]=${date}&` : ""}`
+      `/store/regions`
     )
       .then(({ data }) => {
         return data.regions;
@@ -95,13 +93,13 @@ export const createClient = (
 
   /**
    *
-   * @param date used fetch regions updated since the specified date
+   * @param {string} date used fetch regions updated since the specified date
    * @returns
    */
   async function orders(date?: string) {
     const orders = await medusaRequest(
       storeUrl,
-      `/admin/orders${date ? `?updated_at[gte]=${date}&` : ""}`,
+      `/admin/orders`,
       {
         Authorization: `Bearer ${authToken}`,
       }
@@ -111,27 +109,30 @@ export const createClient = (
       })
       .catch((error) => {
         console.warn(`
-            "The following error status was produced while attempting to fetch regions: ${error}
+            The following error status was produced while attempting to fetch orders: ${error}. \n
+            Make sure that the auth token you provided is valid.
       `);
         return [];
       });
     return orders;
   }
 
+  /**
+   *
+   * @param {string} date used fetch regions updated since the specified date
+   * @returns
+   */
   async function collections(date?: string) {
     const collections = await medusaRequest(
       storeUrl,
-      `/store/orders${date ? `?updated_at[gte]=${date}&` : ""}`,
-      {
-        Authorization: `Bearer ${authToken}`,
-      }
+      `/store/collections`,
     )
       .then(({ data }) => {
         return data.collections;
       })
       .catch((error) => {
         console.warn(`
-            "The following error status was produced while attempting to fetch collections: ${error}
+            error: ${error.response.data}
       `);
         return [];
       });
