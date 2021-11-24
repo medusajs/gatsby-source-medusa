@@ -140,36 +140,38 @@ export async function onCreateNode({
   store: Store
   reporter: Reporter
 }) {
-  if (node.internal.type === `MedusaProducts` && node.thumbnail !== null) {
-    const thumbnailNode = await createRemoteFileNode({
-      url: node.thumbnail as string,
-      parentNodeId: node.id,
-      createNode,
-      createNodeId,
-      cache,
-      store,
-      reporter
-    })
-
-    node.thumbnail = thumbnailNode.id
-  }
-
-  const images: any[] = node.images as any[]
-
-  if (images?.length > 0) {
-    for (let i = 0; i < images.length; i++) {
-      const imageNode = await createRemoteFileNode({
-        url: images[i].url,
-        cache,
+  if (node.internal.type === `MedusaProducts`) {
+    if (node.thumbnail !== null) {
+      const thumbnailNode = await createRemoteFileNode({
+        url: node.thumbnail as string,
+        parentNodeId: node.id,
         createNode,
         createNodeId,
-        parentNodeId: node.id,
+        cache,
         store,
         reporter
       })
 
-      if (imageNode) {
-        images[i] = { image: imageNode.id }
+      node.thumbnail = thumbnailNode.id
+    }
+
+    const images: any[] = node.images as any[]
+
+    if (images?.length > 0) {
+      for (let i = 0; i < images.length; i++) {
+        const imageNode = await createRemoteFileNode({
+          url: images[i].url,
+          cache,
+          createNode,
+          createNodeId,
+          parentNodeId: node.id,
+          store,
+          reporter
+        })
+
+        if (imageNode) {
+          images[i] = { image: imageNode.id }
+        }
       }
     }
   }
