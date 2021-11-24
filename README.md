@@ -24,6 +24,10 @@ Medusa is an open-source headless commerce engine that enables developers to cre
   </a>
 </p>
 
+## Note
+
+This plugin is still being developed, and as such it is not expected function fully or without some additional setup.
+
 ## Quickstart
 
 This takes you through the minimal steps to see your Medusa data in your Gatsby site's GraphiQL explorer.
