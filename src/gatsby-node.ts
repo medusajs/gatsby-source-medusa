@@ -142,32 +142,47 @@ export async function onCreateNode({
 }) {
   if (node.internal.type === `MedusaProducts`) {
     if (node.thumbnail !== null) {
-      const thumbnailNode = await createRemoteFileNode({
-        url: node.thumbnail as string,
-        parentNodeId: node.id,
-        createNode,
-        createNodeId,
-        cache,
-        store,
-        reporter
-      })
+      let thumbnailNode: Node | null = null
+      try {
+        thumbnailNode = await createRemoteFileNode({
+          url: `${node.thumbnail}`,
+          parentNodeId: node.id,
+          createNode,
+          createNodeId,
+          cache,
+          store,
+          reporter
+        })
+      } catch (e) {
+        reporter.warn(`Could not create thumbnail node for ${node.id}`)
+        reporter.warn(`${e}`)
+      }
 
-      node.thumbnail = thumbnailNode.id
+      if (thumbnailNode) {
+        node.thumbnail = thumbnailNode.id
+      }
     }
 
     const images: any[] = node.images as any[]
 
     if (images?.length > 0) {
       for (let i = 0; i < images.length; i++) {
-        const imageNode = await createRemoteFileNode({
-          url: images[i].url,
-          cache,
-          createNode,
-          createNodeId,
-          parentNodeId: node.id,
-          store,
-          reporter
-        })
+        let imageNode: Node | null = null
+
+        try {
+          imageNode = await createRemoteFileNode({
+            url: `${images[i].url}`,
+            cache,
+            createNode,
+            createNodeId,
+            parentNodeId: node.id,
+            store,
+            reporter
+          })
+        } catch (e) {
+          reporter.warn(`Could not create image node for ${node.id}`)
+          reporter.warn(`${e}`)
+        }
 
         if (imageNode) {
           images[i] = { image: imageNode.id }
