@@ -26,7 +26,7 @@ Medusa is an open-source headless commerce engine that enables developers to cre
 
 ## Note
 
-This plugin is still being developed, and as such it is not expected function fully or without some additional setup.
+This plugin is still under development. Please report any issues or suggestions on the GitHub issues page.
 
 ## Quickstart
 
@@ -69,4 +69,4 @@ The plugin accepts two options `storeUrl` and `authToken`. The `storeUrl` option
 
 ## You should now be ready to begin querying your data
 
-You should now be able to view your stores `MedusaProducts`, `MedusaRegions`, and `MedusaOrders` (if enabled) in your Gatsby site's GraphiQL explorer.
+You should now be able to view your stores `MedusaProducts`, `MedusaRegions`, `MedusaCollections`, and `MedusaOrders` (if enabled) in your Gatsby site's GraphiQL explorer.

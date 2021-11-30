@@ -10,9 +10,11 @@ interface IMedusaOperation {
 
 interface IOperations {
   createProductsOperation: IMedusaOperation;
+  createCollectionsOperation: IMedusaOperation;
   createRegionsOperation: IMedusaOperation;
   createOrdersOperation: IMedusaOperation;
   incrementalProductsOperation: (date: Date) => IMedusaOperation;
+  incrementalCollectionsOperation: (date: Date) => IMedusaOperation;
   incrementalRegionsOperation: (date: Date) => IMedusaOperation;
   incrementalOrdersOperation: (date: Date) => IMedusaOperation;
 }
