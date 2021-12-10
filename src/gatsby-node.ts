@@ -1,4 +1,5 @@
 import {
+  CreateResolversArgs,
   GatsbyCache,
   Node,
   PluginOptionsSchemaArgs,
@@ -125,15 +126,52 @@ export async function sourceNodes(
   )
 }
 
+export function createResolvers({ createResolvers }: CreateResolversArgs) {
+  const resolvers = {
+    MedusaProducts: {
+      images: {
+        type: ["MedusaImages"],
+        resolve: async (source: any, _args: any, context: any, _info: any) => {
+          const { entries } = await context.nodeModel.findAll({
+            query: {
+              filter: { parent: { id: { eq: source.id } } }
+            },
+            type: "MedusaImages"
+          })
+          return entries
+        }
+      }
+    }
+  }
+  createResolvers(resolvers)
+}
+
+export async function createSchemaCustomization({
+  actions: { createTypes }
+}: {
+  actions: { createTypes: Function }
+  schema: any
+}) {
+  createTypes(`
+    type MedusaProducts implements Node {
+      thumbnail: File @link(from: "fields.localThumbnail")
+    }
+
+    type MedusaImages implements Node {
+      image: File @link(from: "fields.localImage")
+    }
+  `)
+}
+
 export async function onCreateNode({
-  actions: { createNode },
+  actions: { createNode, createNodeField },
   cache,
   createNodeId,
   node,
   store,
   reporter
 }: {
-  actions: { createNode: Function }
+  actions: { createNode: Function; createNodeField: Function }
   cache: GatsbyCache
   createNodeId: Function
   node: Node
@@ -142,69 +180,44 @@ export async function onCreateNode({
 }) {
   if (node.internal.type === `MedusaProducts`) {
     if (node.thumbnail !== null) {
-      let thumbnailNode: Node | null = null
-      try {
-        thumbnailNode = await createRemoteFileNode({
-          url: `${node.thumbnail}`,
-          parentNodeId: node.id,
-          createNode,
-          createNodeId,
-          cache,
-          store,
-          reporter
-        })
-      } catch (e) {
-        reporter.warn(`Could not create thumbnail node for ${node.id}`)
-        reporter.warn(`${e}`)
-      }
+      let thumbnailNode: Node | null = await createRemoteFileNode({
+        url: `${node.thumbnail}`,
+        parentNodeId: node.id,
+        createNode,
+        createNodeId,
+        cache,
+        store,
+        reporter
+      })
 
       if (thumbnailNode) {
-        node.thumbnail = thumbnailNode.id
-      }
-    }
-
-    const images: any[] = node.images as any[]
-
-    if (images?.length > 0) {
-      for (let i = 0; i < images.length; i++) {
-        let imageNode: Node | null = null
-
-        try {
-          imageNode = await createRemoteFileNode({
-            url: `${images[i].url}`,
-            cache,
-            createNode,
-            createNodeId,
-            parentNodeId: node.id,
-            store,
-            reporter
-          })
-        } catch (e) {
-          reporter.warn(`Could not create image node for ${node.id}`)
-          reporter.warn(`${e}`)
-        }
-
-        if (imageNode) {
-          images[i] = { image: imageNode.id }
-        }
+        createNodeField({
+          node,
+          name: `localThumbnail`,
+          value: thumbnailNode.id
+        })
       }
     }
   }
-}
 
-export async function createSchemaCustomization({
-  actions: { createTypes }
-}: {
-  actions: { createTypes: Function }
-}) {
-  createTypes(`
-    type MedusaProducts implements Node {
-      id: ID!
-      # create a relationship between YourSourceType and the File nodes for optimized images
-      thumbnail: File @link
-      images: [MedusaImage]
+  if (node.internal.type === `MedusaImages`) {
+    let imageNode: Node | null = await createRemoteFileNode({
+      url: `${node.url}`,
+      parentNodeId: node.id,
+      createNode,
+      createNodeId,
+      cache,
+      store,
+      reporter
+    })
+
+    if (imageNode) {
+      reporter.warn(`creating ${node.url}`)
+      createNodeField({
+        node,
+        name: `localImage`,
+        value: imageNode.id
+      })
     }
-    type MedusaImage {
-      image: File @link
-    }`)
+  }
 }
