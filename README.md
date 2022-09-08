@@ -26,7 +26,7 @@ Medusa is an open-source headless commerce engine that enables developers to cre
 
 ## Note
 
-This plugin is still under development. Please report any issues or suggestions on the GitHub issues page.
+>> Plugin has been moved to our [monorepo](https://github.com/medusajs/medusa), please open issues and PR's there, as this repo is no longer maintained <<
 
 ## Quickstart
 
